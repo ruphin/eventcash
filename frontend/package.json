@@ -5,7 +5,7 @@
   "author": "Goffert van Gool",
   "license": "MIT",
   "scripts": {
-    "build": "rollup -c",
+    "build": "",
     "dev": "browser-sync start --config browsersync.config.js",
     "test": "mocha"
   },
