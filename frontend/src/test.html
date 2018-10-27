@@ -1,0 +1,30 @@
+<!-- This loads the app as a module on Chrome, Edge, Firefox, and Safari -->
+<!-- Modules are always nonblocking, and they load after regular scripts, so we can put them first -->
+<script type="module" src="/elements/qrcode.js"></script>
+<script type="module" src="/elements/qrscanner.js"></script>
+
+<div><input id="input" type="text"></div>
+<div>
+  <qr-code id="qrcode"></qr-code>
+</div>
+<div>
+  <qr-scanner id="qrscanner"></qr-scanner>
+</div>
+
+<script>
+  const input = document.getElementById('input');
+  const qrcode = document.getElementById('qrcode');
+  const qrscanner = document.getElementById('qrscanner');
+
+  input.addEventListener('input', (e) => {
+    qrcode.message = input.value
+  });
+
+  qrscanner.addEventListener('code', (e) => {
+    console.log("YOLO")
+    console.log(e.detail.content)
+  });
+</script>
+
+
+<span id="browser-sync-binding"></span>

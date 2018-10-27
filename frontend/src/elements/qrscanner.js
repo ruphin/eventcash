@@ -1,4 +1,4 @@
-import { html, GluonElement } from '../@gluon/gluon/gluon.js';
+import { html, GluonElement } from '../node_modules/@gluon/gluon/gluon.js';
 const decoder = new Worker('../vendor/zbar.js');
 
 export class QRScanner extends GluonElement {
@@ -41,11 +41,6 @@ export class QRScanner extends GluonElement {
 
   get template() {
     return html`<video id="video" autoplay playsinline></video>`;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    this.start();
   }
 
   disconnectedCallback() {
