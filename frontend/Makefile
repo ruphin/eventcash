@@ -13,3 +13,7 @@ test:
 .PHONY: build
 build:
 	docker run -it --rm -v $$PWD:/app ruphin/webdev npm run build
+
+.PHONY: production
+production:
+	docker build -t ruphin/eventcash .

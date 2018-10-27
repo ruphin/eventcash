@@ -30,6 +30,8 @@ export class QRScanner extends GluonElement {
           const imgData = context.getImageData(0, 0, this.canvas.width, this.canvas.height);
           decoder.postMessage(imgData);
         }, 100);
+      }).catch(e => {
+        alert(e)
       });
   }
 

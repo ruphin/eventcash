@@ -1,5 +1,5 @@
-import { html, GluonElement } from '../@gluon/gluon/gluon.js';
-import '../qrcode/build/qrcode.min.js'
+import { html, GluonElement } from '../../node_modules/@gluon/gluon/gluon.js';
+import '../../node_modules/qrcode/build/qrcode.min.js'
 
 export class QRCode extends GluonElement {
   constructor() {
