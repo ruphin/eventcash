@@ -91,8 +91,7 @@ class AppElement extends GluonElement {
       // Lazy load any new pages we are visiting that haven't been loaded yet
       if (this._routes[newPath]) {
         const pageName = this._routes[newPath].tagName.toLowerCase().slice(0, -5);
-        console.log('PAGENAME', pageName);
-        const newPage = `/pages/${pageName || 'index'}.js`;
+        const newPage = `/pages/${newPath || 'home'}.js`;
         import(newPage).then(
           e => {
             console.log('Loaded ' + newPage);

@@ -7,9 +7,12 @@ export class QRScanner extends GluonElement {
     this.canvas = document.createElement('canvas');
     this.canvas.width = Math.min(window.innerWidth, 480);
     this.canvas.height = Math.min(window.innerHeight, 720);
+    this.lastScan = Date.now();
 
     decoder.onmessage = message => {
-      if (message.data[0] !== undefined) {
+      const currentTime = Date.now();
+      if (message.data[0] !== undefined && this.lastScan < currentTime - 1000) {
+        this.lastScan = currentTime;
         const code = message.data[0][0];
         const content = message.data[0][2];
         const event = new CustomEvent('code', { bubbles: true, detail: { code, content } });
@@ -19,6 +22,7 @@ export class QRScanner extends GluonElement {
   }
 
   start() {
+    this.lastScan = Date.now();
     navigator.mediaDevices
       .getUserMedia({ video: { facingMode: 'environment', width: this.canvas.width, height: this.canvas.height }, audio: false })
       .then(stream => {
@@ -30,19 +34,30 @@ export class QRScanner extends GluonElement {
           const imgData = context.getImageData(0, 0, this.canvas.width, this.canvas.height);
           decoder.postMessage(imgData);
         }, 100);
-      }).catch(e => {
-        alert(e)
+      })
+      .catch(e => {
+        alert(e);
       });
   }
 
   stop() {
-    this.videoStream.getTracks()[0].stop();
-    this.videoStream = null;
+    if (this.videoStream) {
+      this.videoStream.getTracks()[0].stop();
+      this.videoStream = null;
+    }
     clearInterval(this.interval);
   }
 
   get template() {
-    return html`<video id="video" autoplay playsinline></video>`;
+    return html`
+      <style>
+        :host {
+          display: block;
+          width: 200px;
+        }
+      </style>
+      <video id="video" autoplay playsinline></video>
+    `;
   }
 
   disconnectedCallback() {

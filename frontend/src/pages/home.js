@@ -6,8 +6,9 @@ class HomePage extends GluonElement {
       <style>
         :host {
           display: block;
-          overflow: none;
+          overflow: auto;
           background: #f3f3f3;
+          padding: 40px;
         }
       </style>
       <a href="/doorman">Doorman</a>

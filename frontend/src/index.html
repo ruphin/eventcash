@@ -56,22 +56,12 @@
   #loadingScreen[loaded] {
     transform: translateY(-100vh);
   }
-
-  .logo {
-    background-image: url('/DAI.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    height: 300px;
-  }
 </style>
 
 <script type="module" src="/index.js"></script>
 
 <app-element>
-  <div id="loadingScreen">
-    <div class="logo"></div>
-  </div>
+  <div id="loadingScreen"></div>
 </app-element>
 
 <span id="browser-sync-binding"></span>
