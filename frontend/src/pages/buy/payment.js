@@ -38,7 +38,7 @@ class PaymentPage extends GluonElement {
       address: opts.address
     };
     this.polling = setInterval(() => {
-      fetch('http://192.168.1.108:3001/api/tickets/check', {
+      fetch('/api/tickets/check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json; charset=utf-8' },
         body: JSON.stringify(data)

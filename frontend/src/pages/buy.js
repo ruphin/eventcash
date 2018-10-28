@@ -373,7 +373,7 @@ class BuyPage extends GluonElement {
     });
     this.$.buyButton.addEventListener('click', () => {
       const data = { event_id: 1, batch_id: 1, amount: Number(this.$.amount.value) };
-      fetch('http://192.168.1.108:3001/api/tickets/create', {
+      fetch('/api/tickets/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json; charset=utf-8' },
         body: JSON.stringify(data)
