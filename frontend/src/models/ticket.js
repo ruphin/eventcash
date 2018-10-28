@@ -7,7 +7,7 @@ class Ticket {
   async checkIn() {
     this.status = 'confirmed';
     const data = { address: this.address };
-    return fetch('http://192.168.1.108:3001/api/tickets/confirm', {
+    return fetch('/api/tickets/confirm', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json; charset=utf-8' },
       body: JSON.stringify(data)
@@ -24,7 +24,7 @@ class Ticket {
 export const tickets = {
   get: async address => {
     console.log('ADDRESS IS', address);
-    return fetch('http://192.168.1.108:3001/api/tickets', {
+    return fetch('/api/tickets', {
       method: 'GET',
       headers: { 'Content-Type': 'application/json; charset=utf-8' }
     })
@@ -38,7 +38,7 @@ export const tickets = {
       });
   },
   all: async () => {
-    return fetch('http://192.168.1.108:3001/api/tickets', { method: 'GET', headers: { 'Content-Type': 'application/json; charset=utf-8' } })
+    return fetch('/api/tickets', { method: 'GET', headers: { 'Content-Type': 'application/json; charset=utf-8' } })
       .then(response => response.json())
       .then(response => {
         return response.map(ticket => new Ticket({ address: ticket.address, status: ticket.status, amount: ticket.amount, salt: ticket.salt }));
