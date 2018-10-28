@@ -16,11 +16,10 @@ class DoormanPage extends GluonElement {
           padding: 40px;
         }
         /* Buttons */
-        .button {
+        button, .button {
           display: inline-block;
           text-decoration: none;
           border: 0;
-          font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
           font-size: 1em;
           line-height: 25px;
           box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
@@ -35,7 +34,7 @@ class DoormanPage extends GluonElement {
           color: #fff;
         }
 
-        .button:hover {
+        button:hover, .button:hover {
           background-color: #3367d6 !important;
           cursor: pointer;
         }
@@ -68,26 +67,28 @@ class DoormanPage extends GluonElement {
       </style>
 
       <div class="title">
-      <h2>Tickets<span class="count"> — ${this.tickets.filter(ticket => ticket.checkedIn).length}/${this.tickets.length}</span></h2>
+      <h2>Tickets<span class="count"> — ${this.tickets.filter(ticket => ticket.status === 'confirmed').length}/${this.tickets.length}</span></h2>
         <a class="button" href="/doorman/scanner">Scan</a>
       </div>
       <div class="ticketList">
-        ${this.tickets.map(ticket => html`
-          <div class=${ticket.checkedIn ? 'checkedin' : ''}><a class="ticketlink" href="/doorman/confirmation?id=${ticket.id}"><span class="check">${ticket.checkedIn ? '✔' : ''}</span>${ticket.id}</a></div>
-        `)}
+        ${this.tickets.map(
+          ticket => html`
+            <div class=${ticket.status === 'confirmed' ? 'checkedin' : ''}>
+              <a class="ticketlink" href="/doorman/confirmation?address=${ticket.address}">
+                <span class="check">${ticket.status === 'confirmed' ? '✔' : ''}</span>
+                ${ticket.address}
+              </a>
+            </div>
+          `
+        )}
       </div>
-
     `;
   }
-  connectedCallback() {
-    super.connectedCallback();
+  visit() {
     tickets.all().then(tickets => {
       this.tickets = tickets;
       this.render();
     });
-  }
-  visit() {
-    this.render();
   }
 }
 

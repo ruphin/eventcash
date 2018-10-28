@@ -1,6 +1,5 @@
 import { GluonElement, html } from '../../../node_modules/@gluon/gluon/gluon.js';
-import { currentQuery } from '../../../node_modules/@gluon/router/gluon-router.js';
-import { changeRoute } from '../../../node_modules/@gluon/router/gluon-router.js';
+import { currentQuery, changeRoute } from '../../../node_modules/@gluon/router/gluon-router.js';
 import { tickets } from '../../models/ticket.js';
 
 class ConfirmationPage extends GluonElement {
@@ -24,7 +23,6 @@ class ConfirmationPage extends GluonElement {
           display: inline-block;
           text-decoration: none;
           border: 0;
-          font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
           font-size: 1em;
           line-height: 25px;
           box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16);
@@ -55,18 +53,20 @@ class ConfirmationPage extends GluonElement {
           margin-left: 18px;
         }
       </style>
-      <h2>${this.ticket.id}</h2>
-      <p>Status: ${this.ticket.checkedIn ? 'Checked In' : 'Checked Out'}</p>
-      <button id="okButton">${this.ticket.checkedIn ? 'Ok' : 'Check In'}</button><button id="noButton" class="red">${
-      this.ticket.checkedIn ? 'Check out' : 'Cancel'
+      <h2>${this.ticket.address}</h2>
+      <p>Paid: ${this.ticket.paid > 0 ? 'Yes' : 'No'}</p>
+      <p>Status: ${this.ticket.status === 'confirmed' ? 'Checked In' : 'Checked Out'}</p>
+      <button id="okButton">${this.ticket.status === 'confirmed' ? 'Ok' : 'Check In'}</button><button id="noButton" class="red">${
+      this.ticket.status === 'confirmed' ? 'Check out' : 'Cancel'
     }</button>
     `;
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.$.okButton.addEventListener('click', () => {
-      this.ticket.checkIn();
+    this.$.okButton.addEventListener('click', async () => {
+      await this.ticket.checkIn();
+      console.log(this.ticket);
       changeRoute('/doorman');
     });
 
@@ -77,13 +77,45 @@ class ConfirmationPage extends GluonElement {
   }
 
   visit() {
-    this.ticket = tickets.get(currentQuery().split('=')[1]).then(ticket => {
+    const opts = {};
+    currentQuery()
+      .split('&')
+      .forEach(queryNode => {
+        const [key, value] = queryNode.split('=');
+        opts[key] = value;
+      });
+    let address = opts.address;
+    let salt = opts.salt;
+    if (opts.ticket) {
+      [address, salt] = opts.ticket.split('|');
+    }
+    this.ticket = tickets.get(address).then(ticket => {
       if (!ticket) {
         alert('Invalid Ticket');
         window.history.back();
       }
       this.ticket = ticket;
       this.render();
+      if (salt) {
+        const data = { address, salt };
+        data.salt = salt;
+        fetch('http://192.168.1.108:3001/api/tickets/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=utf-8' },
+          body: JSON.stringify(data)
+        })
+          .then(response => response.json())
+          .then(response => {
+            if (!response.verified) {
+              alert('Invalid Ticket');
+              this.ticket = {};
+              window.history.back();
+            }
+          })
+          .catch(e => {
+            this.ticket = {};
+          });
+      }
     });
   }
 }

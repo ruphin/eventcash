@@ -27,7 +27,9 @@ class AppElement extends GluonElement {
         <doorman-page route="doorman"></doorman-page>
         <scanner-page route="doorman/scanner"></scanner-page>
         <confirmation-page route="doorman/confirmation"></confirmation-page>
-        <add-account-page route="add">ADD</add-account-page>
+        <buy-page route="buy"></buy-page>
+        <payment-page route="buy/payment"></payment-page>
+        <ticket-page route="buy/ticket"></ticket-page>
       </div>
     `;
   }
@@ -68,12 +70,6 @@ class AppElement extends GluonElement {
       //   return;
       // }
 
-      // Match nested account urls '/accounts/*'
-      if (newPath.startsWith('accounts/')) {
-        newPath = 'accounts/';
-        this._oldPath = newPath;
-      }
-
       // Show the new page
       if (this._routes[newPath]) {
         this._routes[newPath].visit && this._routes[newPath].visit();
@@ -100,6 +96,7 @@ class AppElement extends GluonElement {
             this.querySelector('#loadingScreen').setAttribute('loaded', '');
 
             // TODO: Only do this once for each unique path
+            this._routes[oldPath] && this._routes[oldPath].leave && this._routes[oldPath].leave();
             this._routes[newPath].visit && this._routes[newPath].visit();
           },
           e => {
@@ -125,8 +122,8 @@ class AppElement extends GluonElement {
     // Need some more rigorous implementation of subroutes
     const current = currentPath().slice(1);
     if (!(current in this._routes)) {
-      this._oldPath = 'accounts';
-      window.history.replaceState({}, null, '/accounts');
+      this._oldPath = '';
+      window.history.replaceState({}, null, '');
     } else {
       this._oldPath = current;
     }

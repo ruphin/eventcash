@@ -1,25 +1,47 @@
 class Ticket {
-  constructor({ id, checkedIn }) {
-    this.id = id;
-    this.checkedIn = checkedIn;
+  constructor({ address, status, salt }) {
+    this.address = address;
+    this.salt = salt;
+    this.status = status;
   }
-  checkIn() {
-    this.checkedIn = true;
-    // Send checkin to server
+  async checkIn() {
+    this.status = 'confirmed';
+    const data = { address: this.address };
+    return fetch('http://192.168.1.108:3001/api/tickets/confirm', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify(data)
+    }).then(() => {
+      console.log('GOT THE CHECKIN RESULT');
+    });
   }
   checkOut() {
-    this.checkedIn = false;
+    this.confirmed = 'unconfirmed';
     // Send checkout to server
   }
 }
 
-window.tickets = [new Ticket({ id: 'someTicket' }), new Ticket({ id: 'otherTicket' }), new Ticket({ id: 'oneMoreTicket' })];
-
 export const tickets = {
-  get: async id => {
-    return window.tickets.find(ticket => ticket.id === id);
+  get: async address => {
+    console.log('ADDRESS IS', address);
+    return fetch('http://192.168.1.108:3001/api/tickets', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' }
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log('GOT A THING', response);
+        console.log('LOOKING FOR', address);
+        const ticket = response.find(ticket => ticket.address === address);
+        console.log('TICKET', ticket);
+        return new Ticket({ address: ticket.address, status: ticket.status, amount: ticket.amount, salt: ticket.salt });
+      });
   },
   all: async () => {
-    return window.tickets;
+    return fetch('http://192.168.1.108:3001/api/tickets', { method: 'GET', headers: { 'Content-Type': 'application/json; charset=utf-8' } })
+      .then(response => response.json())
+      .then(response => {
+        return response.map(ticket => new Ticket({ address: ticket.address, status: ticket.status, amount: ticket.amount, salt: ticket.salt }));
+      });
   }
 };

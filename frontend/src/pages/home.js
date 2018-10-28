@@ -10,8 +10,14 @@ class HomePage extends GluonElement {
           background: #f3f3f3;
           padding: 40px;
         }
+        a {
+          line-height: 2em;
+          color: black;
+        }
       </style>
-      <a href="/doorman">Doorman</a>
+      <!-- <div><a href="/create">Create Event</a></div> -->
+      <div><a href="/buy">Buy Tickets</a></div>
+      <div><a href="/doorman">Doorman</a></div>
     `;
   }
 }

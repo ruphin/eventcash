@@ -63,16 +63,6 @@ export class QRScanner extends GluonElement {
   disconnectedCallback() {
     this.stop();
   }
-
-  // set canvas(canvas) {
-  //   this._canvas = canvas;
-  //   const imgData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
-  //   decoder.postMessage(imgData);
-  // }
-
-  // get canvas() {
-  //   return this._canvas;
-  // }
 }
 
 customElements.define(QRScanner.is, QRScanner);
