@@ -89,6 +89,7 @@ class ConfirmationPage extends GluonElement {
     if (opts.ticket) {
       [address, salt] = opts.ticket.split('|');
     }
+    console.log('OPTS', opts);
     this.ticket = tickets.get(address).then(ticket => {
       if (!ticket) {
         alert('Invalid Ticket');

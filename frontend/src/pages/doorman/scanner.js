@@ -19,7 +19,7 @@ class ScannerPage extends GluonElement {
   connectedCallback() {
     super.connectedCallback();
     this.$.scanner.addEventListener('code', e => {
-      tickets.get(e.detail.content).then(ticket => {
+      tickets.get(e.detail.content.split('|')[0]).then(ticket => {
         if (ticket == undefined) {
           alert('Invalid Ticket');
         } else {

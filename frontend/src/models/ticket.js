@@ -30,8 +30,6 @@ export const tickets = {
     })
       .then(response => response.json())
       .then(response => {
-        console.log('GOT A THING', response);
-        console.log('LOOKING FOR', address);
         const ticket = response.find(ticket => ticket.address === address);
         console.log('TICKET', ticket);
         return new Ticket({ address: ticket.address, status: ticket.status, amount: ticket.amount, salt: ticket.salt });
