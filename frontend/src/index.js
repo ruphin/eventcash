@@ -1,11 +1,14 @@
-import { GluonElement, html } from '../node_modules/@gluon/gluon/gluon.js';
-import { changeRoute, interceptLinks, onRouteChange, currentPath } from '../node_modules/@gluon/router/gluon-router.js';
+import { GluonElement, html } from '@gluon/gluon/gluon.js';
+import { changeRoute, interceptLinks, onRouteChange, currentPath } from '@gluon/router/gluon-router.js';
 
 window.modulesAssetPath = module => {
   return `/pages/${module}`;
 };
 
 interceptLinks();
+
+// Lazily loadable page modules, resolved at build time by Vite
+const pageModules = import.meta.glob('./pages/**/*.js');
 
 class AppElement extends GluonElement {
   get template() {
@@ -87,8 +90,9 @@ class AppElement extends GluonElement {
       // Lazy load any new pages we are visiting that haven't been loaded yet
       if (this._routes[newPath]) {
         const pageName = this._routes[newPath].tagName.toLowerCase().slice(0, -5);
-        const newPage = `/pages/${newPath || 'home'}.js`;
-        import(newPage).then(
+        const newPage = `./pages/${newPath || 'home'}.js`;
+        const loadPage = pageModules[newPage] || (() => Promise.reject(new Error('Unknown page ' + newPage)));
+        loadPage().then(
           e => {
             console.log('Loaded ' + newPage);
 

@@ -1,5 +1,5 @@
-import { GluonElement, html } from '../../../node_modules/@gluon/gluon/gluon.js';
-import { currentQuery, changeRoute } from '../../../node_modules/@gluon/router/gluon-router.js';
+import { GluonElement, html } from '@gluon/gluon/gluon.js';
+import { currentQuery, changeRoute } from '@gluon/router/gluon-router.js';
 import '../../elements/qrcode.js';
 
 class PaymentPage extends GluonElement {

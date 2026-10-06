@@ -1,5 +1,5 @@
-import { GluonElement, html } from '../../../node_modules/@gluon/gluon/gluon.js';
-import { changeRoute } from '../../../node_modules/@gluon/router/gluon-router.js';
+import { GluonElement, html } from '@gluon/gluon/gluon.js';
+import { changeRoute } from '@gluon/router/gluon-router.js';
 import { tickets } from '../../models/ticket.js';
 
 import '../../elements/qrscanner.js';

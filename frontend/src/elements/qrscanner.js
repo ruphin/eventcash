@@ -1,5 +1,5 @@
-import { html, GluonElement } from '../node_modules/@gluon/gluon/gluon.js';
-const decoder = new Worker('../vendor/zbar.js');
+import { html, GluonElement } from '@gluon/gluon/gluon.js';
+const decoder = new Worker('/vendor/zbar.js');
 
 export class QRScanner extends GluonElement {
   constructor() {

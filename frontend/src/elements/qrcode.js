@@ -1,5 +1,5 @@
-import { html, GluonElement } from '../../node_modules/@gluon/gluon/gluon.js';
-import '../../node_modules/qrcode/build/qrcode.min.js';
+import { html, GluonElement } from '@gluon/gluon/gluon.js';
+import QRCodeLib from 'qrcode';
 
 export class QRCode extends GluonElement {
   constructor() {
@@ -14,7 +14,7 @@ export class QRCode extends GluonElement {
   set message(value) {
     if (value !== null) {
       this._message = value;
-      window.QRCode.toCanvas(this.canvas, value);
+      QRCodeLib.toCanvas(this.canvas, value);
     }
   }
 
